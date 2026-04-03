@@ -1,0 +1,46 @@
+@startuml
+' ERD for Parking Management System
+
+entity ParkingArea {
++id : bigint <<PK>>
+-------------------
+
+name : varchar
+location : varchar
+created_at : timestamp
+}
+
+entity ParkingSlot {
++id : bigint <<PK>>
+-------------------
+
+parking_area_id : bigint <<FK>>
+slot_number : varchar
+status : varchar
+}
+
+entity Car {
++id : bigint <<PK>>
+-------------------
+
+plate_number : varchar <<UNIQUE>>
+owner_name : varchar
+}
+
+entity ParkingSession {
++id : bigint <<PK>>
+-------------------
+
+car_id : bigint <<FK>>
+parking_slot_id : bigint <<FK>>
+time_in : timestamp
+time_out : timestamp
+status : varchar
+}
+
+' Relationships
+ParkingArea ||--o{ ParkingSlot : contains
+ParkingSlot ||--o{ ParkingSession : used_in
+Car ||--o{ ParkingSession : parks
+
+@enduml
