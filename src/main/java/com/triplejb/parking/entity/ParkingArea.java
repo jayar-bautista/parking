@@ -1,41 +1,38 @@
 package com.triplejb.parking.entity;
 
-import java.util.ArrayList;
+import java.time.LocalDateTime;
 import java.util.List;
 
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
+import lombok.Getter;
+import lombok.Setter;
+
+@Entity
+@Table(name = "parking_area")
+@Getter
+@Setter
 public class ParkingArea {
-	private int totalParkingSlot;
-	private List<ParkingSlot> parkingSlots;
 
-	public ParkingArea(int totalParkingSlot) {
-		super();
-		this.totalParkingSlot = totalParkingSlot;
-		parkingSlots = new ArrayList<ParkingSlot>(totalParkingSlot);
-	}
-	
-	public int getTotalParkingSlot() {
-		return totalParkingSlot;
-	}
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-	public ParkingSlot getAvailableParkingSlot() {
-		for (ParkingSlot parkingSlot: parkingSlots) {
-			if (parkingSlot == null) {
-				parkingSlot = new ParkingSlot();
-				return parkingSlot;
-			} else if (parkingSlot.getCar() == null) {
-				return parkingSlot;
-			}
-		}
-		return null;
-	}
-	
-	public List<ParkingSlot> getOccupiedParkingSlots() {
-		List<ParkingSlot> occupiedParkingSlots = new ArrayList<>();
-		for (ParkingSlot parkingSlot: parkingSlots) {
-			if (parkingSlot != null && parkingSlot.getCar() != null) {
-				occupiedParkingSlots.add(parkingSlot);
-			}
-		}
-		return occupiedParkingSlots;
-	}
+    @Column(nullable = false)
+    private String name;
+
+    private String location;
+
+    @Column(name = "created_at")
+    private LocalDateTime createdAt;
+
+    @OneToMany(mappedBy = "parkingArea", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<ParkingSlot> parkingSlots;
 }

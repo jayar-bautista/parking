@@ -1,8 +1,8 @@
 package com.triplejb.parking.entity;
 
-import java.util.List;
+import java.time.LocalDateTime;
 
-import com.triplejb.parking.enums.SlotStatus;
+import com.triplejb.parking.enums.SessionStatus;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -14,34 +14,35 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
-import jakarta.persistence.UniqueConstraint;
 import lombok.Getter;
 import lombok.Setter;
 
 @Entity
-@Table(name = "parking_slot",
-       uniqueConstraints = @UniqueConstraint(columnNames = {"parking_area_id", "slot_number"}))
+@Table(name = "parking_session")
 @Getter
 @Setter
-public class ParkingSlot {
+public class ParkingSession {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "parking_area_id", nullable = false)
-    private ParkingArea parkingArea;
+    @JoinColumn(name = "car_id", nullable = false)
+    private Car car;
 
-    @Column(name = "slot_number", nullable = false)
-    private String slotNumber;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "parking_slot_id", nullable = false)
+    private ParkingSlot parkingSlot;
+
+    @Column(name = "time_in", nullable = false)
+    private LocalDateTime timeIn;
+
+    @Column(name = "time_out")
+    private LocalDateTime timeOut;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private SlotStatus status;
-
-    @OneToMany(mappedBy = "parkingSlot", fetch = FetchType.LAZY)
-    private List<ParkingSession> parkingSessions;
+    private SessionStatus status;
 }
