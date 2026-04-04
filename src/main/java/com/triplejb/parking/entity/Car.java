@@ -1,14 +1,34 @@
 package com.triplejb.parking.entity;
 
+import java.util.List;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
+import lombok.Getter;
+import lombok.Setter;
+
+@Entity
+@Table(name = "car")
+@Getter
+@Setter
 public class Car {
-	private String plateNumber;
 
-	public Car(String plateNumber) {
-		super();
-		this.plateNumber = plateNumber;
-	}
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-	public String getPlateNumber() {
-		return plateNumber;
-	}
+    @Column(name = "plate_number", nullable = false, unique = true)
+    private String plateNumber;
+
+    @Column(name = "owner_name")
+    private String ownerName;
+
+    @OneToMany(mappedBy = "car", fetch = FetchType.LAZY)
+    private List<ParkingSession> parkingSessions;
 }
