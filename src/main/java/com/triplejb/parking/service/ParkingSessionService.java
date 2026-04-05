@@ -46,7 +46,7 @@ public class ParkingSessionService {
         session.setCar(car);
         session.setParkingSlot(slot);
         session.setTimeIn(LocalDateTime.now());
-        session.setStatus(SessionStatus.ACTIVE); // ✅ important fix
+        session.setStatus(SessionStatus.ACTIVE);
 
         return mapToResponse(sessionRepository.save(session));
     }
@@ -61,7 +61,7 @@ public class ParkingSessionService {
 
         // 2. Set timeout
         session.setTimeOut(LocalDateTime.now());
-        session.setStatus(SessionStatus.COMPLETED); // ✅ important
+        session.setStatus(SessionStatus.COMPLETED);
 
         // 3. Release slot
         slotService.releaseSlot(session.getParkingSlot());
@@ -76,7 +76,6 @@ public class ParkingSessionService {
                 .toList();
     }
 
-    // ✅ Mapper
     private ParkingSessionResponse mapToResponse(ParkingSession session) {
         return ParkingSessionResponse.builder()
                 .plateNumber(session.getCar().getPlateNumber())
